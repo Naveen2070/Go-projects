@@ -1,0 +1,13 @@
+package templates
+
+import "github.com/a-h/templ"
+
+var Index = templ.Must(templ.HTML(
+    `<h1>Todo App</h1>
+     <form hx-post="/add" hx-target="#todos" hx-swap="beforeend">
+         <input type="text" name="task" placeholder="New todo" required>
+         <button type="submit">Add</button>
+     </form>
+     <div id="todos">
+         {{ template .Todos }}
+     </div>`))
