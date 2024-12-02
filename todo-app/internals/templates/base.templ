@@ -1,0 +1,18 @@
+package templates
+
+templ Base() {
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Todo App with GoTTH</title>
+			<link rel="stylesheet" href="/static/css/styles.css"/>
+			<script src="https://unpkg.com/htmx.org" defer></script>
+		</head>
+		<body>
+			<div class="container">
+				{ children... }
+			</div>
+		</body>
+	</html>
+}

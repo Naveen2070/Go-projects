@@ -1,0 +1,14 @@
+package todoItems
+
+import "todo-app/internals/models"
+
+templ TodoItems(items []models.Todo) {
+	if len(items) == 0 {
+		<div>No items</div>
+	}
+	<ul>
+		for _, item := range items {
+			<li>{ item.Task }</li>
+		}
+	</ul>
+}

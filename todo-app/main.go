@@ -1,17 +1,55 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
-	"todo-app/internal/handlers"
+	controllers "todo-app/internals/controller"
+	"todo-app/internals/models"
+	"todo-app/internals/templates/components/todo"
 
+	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 )
 
-func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", handlers.IndexHandler).Methods("GET")
-	r.HandleFunc("/add", handlers.AddTodoHandler).Methods("POST")
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+const (
+	Port = "8080"
+)
 
-	http.ListenAndServe(":8080", r)
+func main() {
+	component := todo.Index(make([]models.Todo, 0))
+
+	router := mux.NewRouter()
+
+	//component endpoints
+	router.Handle("/", templ.Handler(component)).Methods("GET")
+
+	// Static files
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/")))).Methods("GET")
+
+	// API endpoints
+	todoController := controllers.CreateTodoController()
+
+	router.HandleFunc("/api/todos/all", func(w http.ResponseWriter, r *http.Request) {
+		todoController.GetTodos(w, r)
+	}).Methods("GET")
+
+	router.HandleFunc("/api/todos/{id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
+		todoController.GetTodosById(w, r)
+	}).Methods("GET")
+
+	router.HandleFunc("/api/todos/add", func(w http.ResponseWriter, r *http.Request) {
+		todoController.AddTodo(w, r)
+	}).Methods("POST")
+
+	router.HandleFunc("/api/todos/update/{id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
+		todoController.UpdateTodo(w, r)
+	}).Methods("PUT")
+
+	router.HandleFunc("/api/todos/delete/{id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
+		todoController.DeleteTodo(w, r)
+	}).Methods("DELETE")
+
+	// Start server
+	fmt.Printf("Listening on port %s\n", Port)
+	http.ListenAndServe(":"+Port, router)
 }

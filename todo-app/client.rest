@@ -1,0 +1,27 @@
+###Get all
+GET http://localhost:8080/api/todos/all
+
+###Get one
+GET http://localhost:8080/api/todos/1
+
+###Create
+POST http://localhost:8080/api/todos/add
+Content-Type: multipart/form-data
+
+{
+    "task": "new todo"
+}
+
+###Update
+PUT http://localhost:8080/api/todos/update/1
+Content-Type: application/json
+
+{
+    "task": "update todo"
+}
+
+###Delete
+DELETE http://localhost:8080/api/todos/delete/1
+
+###test
+http://localhost:8080/static/css/styles.css

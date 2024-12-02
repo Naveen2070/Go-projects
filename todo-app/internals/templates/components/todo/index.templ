@@ -1,0 +1,20 @@
+package todo
+
+import (
+	"todo-app/internals/models"
+	"todo-app/internals/templates"
+	todoItems "todo-app/internals/templates/components/todo/partials"
+)
+
+templ Index(items []models.Todo) {
+	@templates.Base() {
+		<h1>Todo App</h1>
+		<form hx-post="api/todos/add" hx-target="#todos" hx-swap="beforeend">
+			<input type="text" name="task" placeholder="New todo" required/>
+			<button type="submit">Add</button>
+		</form>
+		<div id="todos">
+			@todoItems.TodoItems(items)
+		</div>
+	}
+}
