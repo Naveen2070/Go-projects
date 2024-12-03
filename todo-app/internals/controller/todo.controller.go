@@ -8,7 +8,7 @@ import (
 	"strings"
 	"todo-app/internals/models"
 	handlers "todo-app/internals/service"
-	"todo-app/internals/templates/components/todo"
+	todoItems "todo-app/internals/templates/components/todo/partials"
 )
 
 // Global Todos instance
@@ -29,21 +29,13 @@ func CreateTodoController() *TodoController {
 
 // getTodos handles GET requests to retrieve todos
 func (c *TodoController) GetTodos(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "text/html")
 
 	data := TodoHandler.GetTodos()
-	// jsonData, err := json.Marshal(data)
 
-	// if err != nil {
-	// 	http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
-	// 	return
-	// }
-
-	component := todo.Index(data)
+	component := todoItems.TodoItems(data)
 
 	component.Render(r.Context(), w)
-
-	// w.Write()
 }
 
 // getTodosById handles GET requests to retrieve a todo by ID

@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	controllers "todo-app/internals/controller"
-	"todo-app/internals/models"
 	"todo-app/internals/templates/components/todo"
 
-	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 )
 
@@ -16,15 +14,22 @@ const (
 )
 
 func main() {
-	component := todo.Index(make([]models.Todo, 0))
 
 	router := mux.NewRouter()
 
 	//component endpoints
-	router.Handle("/", templ.Handler(component)).Methods("GET")
+	mux.NewRouter()
 
 	// Static files
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/")))).Methods("GET")
+
+	// Component endpoint
+	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		data := controllers.TodoHandler.GetTodos()
+		component := todo.Index(data)
+		component.Render(r.Context(), w)
+	})).Methods("GET")
 
 	// API endpoints
 	todoController := controllers.CreateTodoController()

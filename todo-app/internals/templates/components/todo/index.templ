@@ -9,12 +9,14 @@ import (
 templ Index(items []models.Todo) {
 	@templates.Base() {
 		<h1>Todo App</h1>
-		<form hx-post="api/todos/add" hx-target="#todos" hx-swap="beforeend">
+		<form hx-post="api/todos/add" hx-target="#todos-container" hx-swap="innerHTML" hx-on="htmx:afterOnLoad: this.reset()">
 			<input type="text" name="task" placeholder="New todo" required/>
 			<button type="submit">Add</button>
 		</form>
-		<div id="todos">
-			@todoItems.TodoItems(items)
+		<div id="todos-container">
+			<div id="todos">
+				@todoItems.TodoItems(items)
+			</div>
 		</div>
 	}
 }

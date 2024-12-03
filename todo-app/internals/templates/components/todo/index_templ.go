@@ -47,7 +47,7 @@ func Index(items []models.Todo) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Todo App</h1><form hx-post=\"api/todos/add\" hx-target=\"#todos\" hx-swap=\"beforeend\"><input type=\"text\" name=\"task\" placeholder=\"New todo\" required> <button type=\"submit\">Add</button></form><div id=\"todos\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Todo App</h1><form hx-post=\"api/todos/add\" hx-target=\"#todos-container\" hx-swap=\"innerHTML\" hx-on=\"htmx:afterOnLoad: this.reset()\"><input type=\"text\" name=\"task\" placeholder=\"New todo\" required> <button type=\"submit\">Add</button></form><div id=\"todos-container\"><div id=\"todos\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -55,7 +55,7 @@ func Index(items []models.Todo) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
