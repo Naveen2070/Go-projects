@@ -1,14 +1,31 @@
 package todoItems
 
-import "todo-app/internals/models"
+import (
+	"fmt"
+	"todo-app/internals/models"
+)
 
 templ TodoItems(items []models.Todo) {
 	if len(items) == 0 {
 		<div>No items</div>
+	} else {
+		<ul class="space-y-2">
+			for _, item := range items {
+				<li class="border border-gray-300 rounded py-2 px-4 flex items-center justify-between">
+					{ item.Task }
+					<div class="flex space-x-2">
+						<span class="cursor-pointer">✏️</span>
+						<span
+							class="cursor-pointer"
+							hx-delete={ fmt.Sprintf("/api/todos/delete/%d", item.ID) }
+							hx-target="closest li"
+							hx-swap="outerHTML"
+						>
+							🗑️
+						</span>
+					</div>
+				</li>
+			}
+		</ul>
 	}
-	<ul>
-		for _, item := range items {
-			<li>{ item.Task }</li>
-		}
-	</ul>
 }

@@ -8,9 +8,10 @@ templ Base() {
 			<title>Todo App with GoTTH</title>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
 			<script src="https://unpkg.com/htmx.org" defer></script>
+			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
-		<body>
-			<div class="container">
+		<body class="bg-black">
+			<div class="container mx-auto p-4">
 				{ children... }
 			</div>
 		</body>

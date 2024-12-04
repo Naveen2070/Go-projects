@@ -101,7 +101,7 @@ func (c *TodoController) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 	TodoHandler.DeleteTodo(int(todo.ID))
 	w.WriteHeader(http.StatusOK)
-	c.GetTodos(w, r)
+	// c.GetTodos(w, r)
 }
 
 // updateTodo handles PUT requests to update an existing todo
@@ -136,12 +136,19 @@ func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updatedTodo := models.Todo{
+	updateTodo := models.Todo{
 		ID:   int(id),
 		Task: payload.Task,
 	}
 
-	TodoHandler.UpdateTodo(updatedTodo)
+	TodoHandler.UpdateTodo(updateTodo)
 	w.WriteHeader(http.StatusOK)
-	c.GetTodos(w, r)
+
+	updatedTodo := []models.Todo{
+		{ID: int(id), Task: payload.Task},
+	}
+
+	component := todoItems.TodoItems(updatedTodo)
+
+	component.Render(r.Context(), w)
 }
