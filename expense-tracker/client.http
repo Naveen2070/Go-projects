@@ -5,15 +5,29 @@ GET http://localhost:8080/
 GET http://localhost:8080/api/v1/expenses
 
 #### Get expense by id
-GET http://localhost:8080/api/v1/expenses/1
+GET http://localhost:8080/api/v1/expenses/94e05586-c832-4703-b3c1-32c8f6b8fa05
 
 #### Create new expense
 POST http://localhost:8080/api/v1/expenses
 Content-Type: application/json
 
 {
-    "description": "test",
+    "description": "Go demo application build",
     "amount": 100.00,
-    "category": "test",
-    "date":"01-01-2024"
+    "category": "Coding",
+    "date":"2024-01-01"
 }
+
+#### Update expense by id
+PUT http://localhost:8080/api/v1/expenses/94e05586-c832-4703-b3c1-32c8f6b8fa05
+Content-Type: application/json
+
+{
+    "description": "Go demo application build for expense tracker",
+    "amount": 100.00,
+    "category": "Coding",
+    "date":"2024-01-01"
+}
+
+#### Delete expense by id
+DELETE http://localhost:8080/api/v1/expenses/94e05586-c832-4703-b3c1-32c8f6b8fa05

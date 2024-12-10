@@ -3,6 +3,9 @@ package ExpenseService
 import (
 	database "ExpenseTracker/app/db"
 	model "ExpenseTracker/app/model"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 var db = database.ConnectDB()
@@ -16,7 +19,7 @@ func GetAllExpenses() ([]model.Expense, error) {
 	return expenses, nil
 }
 
-func GetExpenseByID(id int) (model.Expense, error) {
+func GetExpenseByID(id uuid.UUID) (model.Expense, error) {
 	var expense model.Expense
 	result := db.First(&expense, id)
 	if result.Error != nil {
@@ -25,37 +28,45 @@ func GetExpenseByID(id int) (model.Expense, error) {
 	return expense, nil
 }
 
-func CreateExpense(expense model.CreateExpenseRequest) model.CreateExpenseRequest {
-	result := db.Create(&expense)
+func CreateExpense(expenses model.CreateExpenseRequest) (bool, error) {
+	parsedTime, _ := time.Parse("2006-01-02", expenses.Date)
+	result := db.Create(&model.Expense{
+		ID:          uuid.New(),
+		Description: expenses.Description,
+		Amount:      expenses.Amount,
+		Category:    expenses.Category,
+		Date:        parsedTime,
+	})
 	if result.Error != nil {
-		return model.CreateExpenseRequest{}
+		return false, result.Error
 	}
-	return expense
+
+	return true, nil
 }
 
-func UpdateExpense(id int, updatedExpense model.Expense) (model.Expense, error) {
+func UpdateExpense(id uuid.UUID, updatedExpense model.UpdateExpenseRequest) (model.Expense, error) {
 	var expense model.Expense
 	result := db.First(&expense, id)
 	if result.Error != nil {
 		return model.Expense{}, result.Error
 	}
-
-	updatedExpense = model.Expense{
+	parsedTime, _ := time.Parse("2006-01-02", updatedExpense.Date)
+	expenseToUpdate := model.Expense{
 		Description: updatedExpense.Description,
 		Amount:      updatedExpense.Amount,
 		Category:    updatedExpense.Category,
-		Date:        updatedExpense.Date,
-		UpdatedAt:   updatedExpense.UpdatedAt,
+		Date:        parsedTime,
+		UpdatedAt:   time.Now(),
 	}
 
-	result = db.Save(&updatedExpense)
+	result = db.Model(&expense).Updates(&expenseToUpdate)
 	if result.Error != nil {
 		return model.Expense{}, result.Error
 	}
 	return expense, nil
 }
 
-func DeleteExpense(id int) error {
+func DeleteExpense(id uuid.UUID) error {
 	var expense model.Expense
 	result := db.First(&expense, id)
 	if result.Error != nil {

@@ -4,9 +4,8 @@ import (
 	models "ExpenseTracker/app/model"
 	ExpenseService "ExpenseTracker/app/service"
 
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 func RegisterRoutes(api fiber.Router) {
@@ -20,55 +19,69 @@ func RegisterRoutes(api fiber.Router) {
 func getAllExpenses(c *fiber.Ctx) error {
 	expenses, err := ExpenseService.GetAllExpenses()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to retrieve expenses"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to retrieve expenses"})
 	}
-	return c.JSON(expenses)
+	return c.JSON(fiber.Map{"data": expenses})
 }
 
 func getExpenseByID(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	unParsedID := c.Params("id")
+
+	id, err := uuid.Parse(unParsedID)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid expense ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
+
 	expense, err := ExpenseService.GetExpenseByID(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "expense not found"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense with id " + unParsedID + " not found", "data": []string{}})
 	}
-	return c.JSON(expense)
+	return c.JSON(fiber.Map{"data": &[]models.Expense{expense}})
 }
 
 func createExpense(c *fiber.Ctx) error {
-	var expense models.CreateExpenseRequest
-	if err := c.BodyParser(&expense); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	var expenses models.CreateExpenseRequest
+	if err := c.BodyParser(&expenses); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
-	newExpense := ExpenseService.CreateExpense(expense)
-	return c.JSON(newExpense)
+	result, _ := ExpenseService.CreateExpense(expenses)
+	if !result {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to create expense"})
+	}
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Expense created successfully"})
 }
 
 func updateExpense(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	unParsedID := c.Params("id")
+
+	id, err := uuid.Parse(unParsedID)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid expense ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
-	var updatedExpense models.Expense
+
+	var updatedExpense models.UpdateExpenseRequest
 	if err := c.BodyParser(&updatedExpense); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
-	updatedExpense, err = ExpenseService.UpdateExpense(id, updatedExpense)
+
+	expense, err := ExpenseService.UpdateExpense(id, updatedExpense)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "expense not found"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense not found"})
 	}
-	return c.JSON(updatedExpense)
+	return c.JSON(fiber.Map{"data": &[]models.Expense{expense}})
 }
 
 func deleteExpense(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	unParsedID := c.Params("id")
+
+	id, err := uuid.Parse(unParsedID)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid expense ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
+
 	if err := ExpenseService.DeleteExpense(id); err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "expense not found"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense not found"})
 	}
+
 	return c.SendStatus(fiber.StatusNoContent)
 }
