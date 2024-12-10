@@ -2,6 +2,7 @@ package main
 
 import (
 	"ExpenseTracker/app"
+	utilities "ExpenseTracker/app/utils"
 	"log"
 	"os"
 
@@ -14,7 +15,11 @@ var PORT string
 // environment variable "PORT". If the environment variable is not set,
 // it defaults to "8080".
 func init() {
-	PORT = os.Getenv("PORT")
+	err := utilities.LoadEnv()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	PORT = os.Getenv("SERVER_PORT")
 	if PORT == "" {
 		PORT = "8080"
 	}

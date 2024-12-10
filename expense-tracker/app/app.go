@@ -15,6 +15,7 @@ func Setup(app *fiber.App) {
 		return c.SendString("Hello, World!")
 	})
 
-	ExpenseController.RegisterRoutes(app)
+	apiV1 := app.Group("/api/v1")
+	ExpenseController.RegisterRoutes(apiV1)
 
 }

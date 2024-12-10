@@ -1,46 +1,70 @@
 package ExpenseService
 
 import (
+	database "ExpenseTracker/app/db"
 	model "ExpenseTracker/app/model"
-	"errors"
 )
 
-func GetAllExpenses() []model.Expense {
-	return model.Expenses
+var db = database.ConnectDB()
+
+func GetAllExpenses() ([]model.Expense, error) {
+	var expenses []model.Expense
+	result := db.Find(&expenses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return expenses, nil
 }
 
 func GetExpenseByID(id int) (model.Expense, error) {
-	for _, expense := range model.Expenses {
-		if expense.ID == id {
-			return expense, nil
-		}
+	var expense model.Expense
+	result := db.First(&expense, id)
+	if result.Error != nil {
+		return model.Expense{}, result.Error
 	}
-	return model.Expense{}, errors.New("expense not found")
+	return expense, nil
 }
 
-func CreateExpense(expense model.Expense) model.Expense {
-	expense.ID = len(model.Expenses) + 1
-	model.Expenses = append(model.Expenses, expense)
+func CreateExpense(expense model.CreateExpenseRequest) model.CreateExpenseRequest {
+	result := db.Create(&expense)
+	if result.Error != nil {
+		return model.CreateExpenseRequest{}
+	}
 	return expense
 }
 
 func UpdateExpense(id int, updatedExpense model.Expense) (model.Expense, error) {
-	for i, expense := range model.Expenses {
-		if expense.ID == id {
-			model.Expenses[i] = updatedExpense
-			model.Expenses[i].ID = id
-			return model.Expenses[i], nil
-		}
+	var expense model.Expense
+	result := db.First(&expense, id)
+	if result.Error != nil {
+		return model.Expense{}, result.Error
 	}
-	return model.Expense{}, errors.New("expense not found")
+
+	updatedExpense = model.Expense{
+		Description: updatedExpense.Description,
+		Amount:      updatedExpense.Amount,
+		Category:    updatedExpense.Category,
+		Date:        updatedExpense.Date,
+		UpdatedAt:   updatedExpense.UpdatedAt,
+	}
+
+	result = db.Save(&updatedExpense)
+	if result.Error != nil {
+		return model.Expense{}, result.Error
+	}
+	return expense, nil
 }
 
 func DeleteExpense(id int) error {
-	for i, expense := range model.Expenses {
-		if expense.ID == id {
-			model.Expenses = append(model.Expenses[:i], model.Expenses[i+1:]...)
-			return nil
-		}
+	var expense model.Expense
+	result := db.First(&expense, id)
+	if result.Error != nil {
+		return result.Error
 	}
-	return errors.New("expense not found")
+
+	result = db.Delete(&expense)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

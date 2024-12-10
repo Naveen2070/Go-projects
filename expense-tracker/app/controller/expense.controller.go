@@ -9,16 +9,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterRoutes(app *fiber.App) {
-	app.Get("/expenses", getAllExpenses)
-	app.Get("/expenses/:id", getExpenseByID)
-	app.Post("/expenses", createExpense)
-	app.Put("/expenses/:id", updateExpense)
-	app.Delete("/expenses/:id", deleteExpense)
+func RegisterRoutes(api fiber.Router) {
+	api.Get("/expenses", getAllExpenses)
+	api.Get("/expenses/:id", getExpenseByID)
+	api.Post("/expenses", createExpense)
+	api.Put("/expenses/:id", updateExpense)
+	api.Delete("/expenses/:id", deleteExpense)
 }
 
 func getAllExpenses(c *fiber.Ctx) error {
-	expenses := ExpenseService.GetAllExpenses()
+	expenses, err := ExpenseService.GetAllExpenses()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to retrieve expenses"})
+	}
 	return c.JSON(expenses)
 }
 
@@ -35,7 +38,7 @@ func getExpenseByID(c *fiber.Ctx) error {
 }
 
 func createExpense(c *fiber.Ctx) error {
-	var expense models.Expense
+	var expense models.CreateExpenseRequest
 	if err := c.BodyParser(&expense); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
 	}

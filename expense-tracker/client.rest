@@ -1,5 +1,0 @@
-### root
-GET http://localhost:8080/
-
-### Get all expenses
-GET http://localhost:8080/expenses
