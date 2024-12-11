@@ -1,4 +1,4 @@
-package expenseModel
+package model
 
 import (
 	"time"
@@ -17,19 +17,10 @@ type Expense struct {
 	DeletedAt   *time.Time `json:"deleted_at,omitempty"`
 }
 
-type CreateExpenseRequest struct {
+type ExpensePayload struct {
 	ID          uuid.UUID `json:"id"`
 	Description string    `json:"description"`
 	Amount      float64   `json:"amount"`
 	Category    string    `json:"category"`
 	Date        string    `json:"date"`
-}
-
-type UpdateExpenseRequest struct {
-	ID          uuid.UUID `json:"id"`
-	Description string    `json:"description"`
-	Amount      float64   `json:"amount"`
-	Category    string    `json:"category"`
-	Date        string    `json:"date"`
-	UpdatedAt   time.Time
 }

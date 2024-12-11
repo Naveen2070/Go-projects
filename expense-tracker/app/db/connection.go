@@ -1,7 +1,7 @@
-package database
+package connection
 
 import (
-	expenseSchema "ExpenseTracker/app/db/schema"
+	"ExpenseTracker/app/db/schema"
 	utilities "ExpenseTracker/app/utils"
 	"log"
 	"os"
@@ -58,7 +58,7 @@ func ConnectDB() *gorm.DB {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&expenseSchema.Expense{})
+	db.AutoMigrate(&schema.Expense{}, &schema.User{})
 
 	return db
 }

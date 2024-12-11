@@ -1,14 +1,22 @@
-package ExpenseService
+package service
 
 import (
-	database "ExpenseTracker/app/db"
-	model "ExpenseTracker/app/model"
+	connection "ExpenseTracker/app/db"
+	"ExpenseTracker/app/model"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-var db = database.ConnectDB()
+var db = connection.ConnectDB()
+
+type ExpenseService interface {
+	GetAllExpenses() ([]model.Expense, error)
+	GetExpenseByID(id uuid.UUID) (model.Expense, error)
+	CreateExpense(expenses model.ExpensePayload) (bool, error)
+	UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Expense, error)
+	DeleteExpense(id uuid.UUID) error
+}
 
 func GetAllExpenses() ([]model.Expense, error) {
 	var expenses []model.Expense
@@ -28,7 +36,7 @@ func GetExpenseByID(id uuid.UUID) (model.Expense, error) {
 	return expense, nil
 }
 
-func CreateExpense(expenses model.CreateExpenseRequest) (bool, error) {
+func CreateExpense(expenses model.ExpensePayload) (bool, error) {
 	parsedTime, _ := time.Parse("2006-01-02", expenses.Date)
 	result := db.Create(&model.Expense{
 		ID:          uuid.New(),
@@ -44,7 +52,7 @@ func CreateExpense(expenses model.CreateExpenseRequest) (bool, error) {
 	return true, nil
 }
 
-func UpdateExpense(id uuid.UUID, updatedExpense model.UpdateExpenseRequest) (model.Expense, error) {
+func UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Expense, error) {
 	var expense model.Expense
 	result := db.First(&expense, id)
 	if result.Error != nil {

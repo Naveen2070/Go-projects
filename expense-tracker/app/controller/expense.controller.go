@@ -1,14 +1,16 @@
-package ExpenseController
+package controller
 
 import (
-	models "ExpenseTracker/app/model"
-	ExpenseService "ExpenseTracker/app/service"
+	"ExpenseTracker/app/model"
+	"ExpenseTracker/app/service"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
 
-func RegisterRoutes(api fiber.Router) {
+var ExpenseService service.ExpenseService
+
+func RegisterExpenseRoutes(api fiber.Router) {
 	api.Get("/expenses", getAllExpenses)
 	api.Get("/expenses/:id", getExpenseByID)
 	api.Post("/expenses", createExpense)
@@ -36,11 +38,11 @@ func getExpenseByID(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense with id " + unParsedID + " not found", "data": []string{}})
 	}
-	return c.JSON(fiber.Map{"data": &[]models.Expense{expense}})
+	return c.JSON(fiber.Map{"data": &[]model.Expense{expense}})
 }
 
 func createExpense(c *fiber.Ctx) error {
-	var expenses models.CreateExpenseRequest
+	var expenses model.ExpensePayload
 	if err := c.BodyParser(&expenses); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
@@ -59,7 +61,7 @@ func updateExpense(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
 
-	var updatedExpense models.UpdateExpenseRequest
+	var updatedExpense model.ExpensePayload
 	if err := c.BodyParser(&updatedExpense); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
@@ -68,7 +70,7 @@ func updateExpense(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense not found"})
 	}
-	return c.JSON(fiber.Map{"data": &[]models.Expense{expense}})
+	return c.JSON(fiber.Map{"data": &[]model.Expense{expense}})
 }
 
 func deleteExpense(c *fiber.Ctx) error {

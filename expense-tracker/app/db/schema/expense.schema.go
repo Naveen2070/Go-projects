@@ -1,4 +1,4 @@
-package expenseSchema
+package schema
 
 import (
 	"time"
