@@ -8,37 +8,35 @@ import (
 	"github.com/google/uuid"
 )
 
-var db = connection.ConnectDB()
+var expensesConnection = connection.ConnectDB()
 
-type ExpenseService interface {
-	GetAllExpenses() ([]model.Expense, error)
-	GetExpenseByID(id uuid.UUID) (model.Expense, error)
-	CreateExpense(expenses model.ExpensePayload) (bool, error)
-	UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Expense, error)
-	DeleteExpense(id uuid.UUID) error
+type ExpenseService struct{}
+
+func NewExpenseService() *ExpenseService {
+	return &ExpenseService{}
 }
 
-func GetAllExpenses() ([]model.Expense, error) {
+func (s *ExpenseService) GetAllExpenses() ([]model.Expense, error) {
 	var expenses []model.Expense
-	result := db.Find(&expenses)
+	result := expensesConnection.Find(&expenses)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return expenses, nil
 }
 
-func GetExpenseByID(id uuid.UUID) (model.Expense, error) {
+func (s *ExpenseService) GetExpenseByID(id uuid.UUID) (model.Expense, error) {
 	var expense model.Expense
-	result := db.First(&expense, id)
+	result := expensesConnection.First(&expense, id)
 	if result.Error != nil {
 		return model.Expense{}, result.Error
 	}
 	return expense, nil
 }
 
-func CreateExpense(expenses model.ExpensePayload) (bool, error) {
+func (s *ExpenseService) CreateExpense(expenses model.ExpensePayload) (bool, error) {
 	parsedTime, _ := time.Parse("2006-01-02", expenses.Date)
-	result := db.Create(&model.Expense{
+	result := expensesConnection.Create(&model.Expense{
 		ID:          uuid.New(),
 		Description: expenses.Description,
 		Amount:      expenses.Amount,
@@ -52,9 +50,9 @@ func CreateExpense(expenses model.ExpensePayload) (bool, error) {
 	return true, nil
 }
 
-func UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Expense, error) {
+func (s *ExpenseService) UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Expense, error) {
 	var expense model.Expense
-	result := db.First(&expense, id)
+	result := expensesConnection.First(&expense, id)
 	if result.Error != nil {
 		return model.Expense{}, result.Error
 	}
@@ -67,21 +65,21 @@ func UpdateExpense(id uuid.UUID, updatedExpense model.ExpensePayload) (model.Exp
 		UpdatedAt:   time.Now(),
 	}
 
-	result = db.Model(&expense).Updates(&expenseToUpdate)
+	result = expensesConnection.Model(&expense).Updates(&expenseToUpdate)
 	if result.Error != nil {
 		return model.Expense{}, result.Error
 	}
 	return expense, nil
 }
 
-func DeleteExpense(id uuid.UUID) error {
+func (s *ExpenseService) DeleteExpense(id uuid.UUID) error {
 	var expense model.Expense
-	result := db.First(&expense, id)
+	result := expensesConnection.First(&expense, id)
 	if result.Error != nil {
 		return result.Error
 	}
 
-	result = db.Delete(&expense)
+	result = expensesConnection.Delete(&expense)
 	if result.Error != nil {
 		return result.Error
 	}

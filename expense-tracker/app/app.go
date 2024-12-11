@@ -20,8 +20,10 @@ func Setup(app *fiber.App) {
 
 	//Path group
 	expenseGroup := apiV1.Group("/expenses")
+	userGroup := apiV1.Group("/users")
 
 	//controller registration
 	controller.RegisterExpenseRoutes(expenseGroup)
+	controller.RegisterUserRoutes(userGroup)
 
 }

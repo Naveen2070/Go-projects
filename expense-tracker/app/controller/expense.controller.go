@@ -8,18 +8,21 @@ import (
 	"github.com/google/uuid"
 )
 
-var ExpenseService service.ExpenseService
+var expenseService *service.ExpenseService
 
 func RegisterExpenseRoutes(api fiber.Router) {
-	api.Get("/expenses", getAllExpenses)
-	api.Get("/expenses/:id", getExpenseByID)
-	api.Post("/expenses", createExpense)
-	api.Put("/expenses/:id", updateExpense)
-	api.Delete("/expenses/:id", deleteExpense)
+	// Initialize the service
+	expenseService = service.NewExpenseService()
+
+	api.Get("/", getAllExpenses)
+	api.Get("/:id", getExpenseByID)
+	api.Post("/", createExpense)
+	api.Put("/:id", updateExpense)
+	api.Delete("/:id", deleteExpense)
 }
 
 func getAllExpenses(c *fiber.Ctx) error {
-	expenses, err := ExpenseService.GetAllExpenses()
+	expenses, err := expenseService.GetAllExpenses()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to retrieve expenses"})
 	}
@@ -34,7 +37,7 @@ func getExpenseByID(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
 
-	expense, err := ExpenseService.GetExpenseByID(id)
+	expense, err := expenseService.GetExpenseByID(id)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense with id " + unParsedID + " not found", "data": []string{}})
 	}
@@ -46,7 +49,7 @@ func createExpense(c *fiber.Ctx) error {
 	if err := c.BodyParser(&expenses); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
-	result, _ := ExpenseService.CreateExpense(expenses)
+	result, _ := expenseService.CreateExpense(expenses)
 	if !result {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to create expense"})
 	}
@@ -66,7 +69,7 @@ func updateExpense(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
 
-	expense, err := ExpenseService.UpdateExpense(id, updatedExpense)
+	expense, err := expenseService.UpdateExpense(id, updatedExpense)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense not found"})
 	}
@@ -81,7 +84,7 @@ func deleteExpense(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
 	}
 
-	if err := ExpenseService.DeleteExpense(id); err != nil {
+	if err := expenseService.DeleteExpense(id); err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "expense not found"})
 	}
 
