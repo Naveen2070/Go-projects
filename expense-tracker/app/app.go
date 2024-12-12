@@ -20,10 +20,16 @@ func Setup(app *fiber.App) {
 	apiV1 := app.Group("/api/v1")
 
 	//Path group
+	authGroup := apiV1.Group("/auth")
 	expenseGroup := apiV1.Group("/expenses")
 	userGroup := apiV1.Group("/users")
 
+	//add route specific middleware
+	expenseGroup.Use(middleware.JWTProtected)
+	userGroup.Use(middleware.JWTProtected)
+
 	//controller registration
+	controller.RegisterAuthRoutes(authGroup)
 	controller.RegisterExpenseRoutes(expenseGroup)
 	controller.RegisterUserRoutes(userGroup)
 

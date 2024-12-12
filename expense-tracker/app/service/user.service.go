@@ -98,3 +98,12 @@ func (s *UserService) UpdatePassword(id uuid.UUID, newPassword string) error {
 	}
 	return nil
 }
+
+func (s *UserService) GetUserByEmail(email string) (model.User, error) {
+	var user model.User
+	result := db.Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		return model.User{}, result.Error
+	}
+	return user, nil
+}
