@@ -12,6 +12,7 @@ type User struct {
 	Username  string
 	Email     string
 	Password  string
+	Expenses  []Expense `gorm:"foreignKey:UserID"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`

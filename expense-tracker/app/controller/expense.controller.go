@@ -14,17 +14,27 @@ func RegisterExpenseRoutes(api fiber.Router) {
 	// Initialize the service
 	expenseService = service.NewExpenseService()
 
-	api.Get("/", getAllExpenses)
-	api.Get("/:id", getExpenseByID)
+	api.Get("/:userID", getAllExpenses)
+	api.Get("/getExpenseById/:id", getExpenseByID)
 	api.Post("/", createExpense)
 	api.Put("/:id", updateExpense)
 	api.Delete("/:id", deleteExpense)
 }
 
 func getAllExpenses(c *fiber.Ctx) error {
-	expenses, err := expenseService.GetAllExpenses()
+	unParsedID := c.Params("userID")
+
+	id, err := uuid.Parse(unParsedID)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to retrieve expenses"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
+	}
+
+	expenses, err := expenseService.GetAllExpenses(id)
+	if err != nil {
+		if err.Error() == "record not found" {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "No expenses found for user with id " + unParsedID, "data": []string{}})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to retrieve expenses", "error": err.Error()})
 	}
 	return c.JSON(fiber.Map{"data": expenses})
 }

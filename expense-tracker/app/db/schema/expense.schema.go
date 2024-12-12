@@ -13,6 +13,7 @@ type Expense struct {
 	Amount      float64
 	Category    string
 	Date        time.Time
+	UserID      uuid.UUID
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   gorm.DeletedAt `gorm:"index"`

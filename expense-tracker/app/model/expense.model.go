@@ -8,6 +8,7 @@ import (
 
 type Expense struct {
 	ID          uuid.UUID  `json:"id"`
+	UserID      uuid.UUID  `json:"userId"`
 	Description string     `json:"description"`
 	Amount      float64    `json:"amount"`
 	Category    string     `json:"category"`
@@ -19,6 +20,7 @@ type Expense struct {
 
 type ExpensePayload struct {
 	ID          uuid.UUID `json:"id"`
+	UserID      uuid.UUID `json:"userId"`
 	Description string    `json:"description"`
 	Amount      float64   `json:"amount"`
 	Category    string    `json:"category"`

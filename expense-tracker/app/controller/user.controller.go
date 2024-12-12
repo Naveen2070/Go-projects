@@ -19,6 +19,7 @@ func RegisterUserRoutes(api fiber.Router) {
 	api.Post("/", createUser)
 	api.Put("/:id", updateUser)
 	api.Delete("/:id", deleteUser)
+	api.Put("/updatePassword/:id", updatePassword)
 }
 
 func getAllUsers(c *fiber.Ctx) error {
@@ -85,6 +86,21 @@ func deleteUser(c *fiber.Ctx) error {
 	}
 
 	if err := userService.DeleteUser(id); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "user not found"})
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
+}
+
+func updatePassword(c *fiber.Ctx) error {
+	unParsedID := c.Params("id")
+
+	id, err := uuid.Parse(unParsedID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid UUID"})
+	}
+
+	if err := userService.UpdatePassword(id, c.FormValue("password")); err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "user not found"})
 	}
 

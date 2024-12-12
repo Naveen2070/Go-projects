@@ -10,6 +10,7 @@ import (
 func Setup(app *fiber.App) {
 
 	app.Use(middleware.Logger())
+	app.Use(middleware.Helmet())
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
