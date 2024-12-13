@@ -9,12 +9,9 @@ import (
 
 func Setup(app *fiber.App) {
 
+	//middleware registration
 	app.Use(middleware.Logger())
 	app.Use(middleware.Helmet())
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
 
 	//version group
 	apiV1 := app.Group("/api/v1")

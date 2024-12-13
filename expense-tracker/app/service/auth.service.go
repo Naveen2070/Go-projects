@@ -28,12 +28,15 @@ func (s *AuthService) Login(user model.AuthPayload) (string, error) {
 		return "", err
 	}
 
-	isValid := utilities.NewPassFactory().ComparePassword(user.Password, result.Password)
+	isValid := utilities.NewPassFactory().ComparePassword(result.Password, user.Password)
 	if !isValid {
 		return "", errors.New("invalid credentials")
 	}
 
-	token, err := utilities.GenerateToken(result.ID)
+	token, err := utilities.GenerateToken(model.User{
+		ID:       result.ID,
+		Username: result.Username,
+	})
 	if err != nil {
 		return "", err
 	}

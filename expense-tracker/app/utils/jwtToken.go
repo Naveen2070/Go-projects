@@ -1,18 +1,34 @@
 package utilities
 
 import (
+	"ExpenseTracker/app/model"
+	"log"
 	"os"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 )
 
-func GenerateToken(id uuid.UUID) (string, error) {
+func GenerateToken(data model.User) (string, error) {
+	err := LoadEnv()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	// Set the token expiration time (e.g., 1 hour)
+	expirationTime := time.Now().Add(24 * time.Hour).Unix()
+
+	// Create the Claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": id,
+		"userId":   data.ID,
+		"username": data.Username,
+		"exp":      expirationTime,
 	})
 
-	t, err := token.SignedString(os.Getenv("JWT_SECRET"))
+	// Convert the JWT_SECRET to []byte
+	secret := []byte(os.Getenv("JWT_SECRET"))
+
+	t, err := token.SignedString(secret)
 	if err != nil {
 		return "", err
 	}
@@ -21,6 +37,11 @@ func GenerateToken(id uuid.UUID) (string, error) {
 }
 
 func VerifyToken(tokenString string) (bool, error) {
+	err := LoadEnv()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET")), nil
 	})

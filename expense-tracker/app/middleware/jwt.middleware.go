@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	utilities "ExpenseTracker/app/utils"
+	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,6 +11,11 @@ import (
 )
 
 func JWTProtected(c *fiber.Ctx) error {
+	err := utilities.LoadEnv()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	return jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 		ContextKey: "jwt",

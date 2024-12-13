@@ -43,11 +43,11 @@ func loginUser(c *fiber.Ctx) error {
 
 	result, err := authService.Login(user)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to login user"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to login user", "error": err.Error()})
 	}
 
 	if result == "" {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to login user"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to generate token"})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "User logged in successfully", "token": result})
