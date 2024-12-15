@@ -11,6 +11,7 @@ type User struct {
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`
 	Password  string     `json:"password"`
+	TfaSecret string     `json:"TfaSecret"`
 	Expenses  []Expense  `json:"expenses"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
@@ -18,7 +19,8 @@ type User struct {
 }
 
 type UserPayload struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password,omitempty"`
+	TfaSecret string `json:"TfaSecret,omitempty"`
 }

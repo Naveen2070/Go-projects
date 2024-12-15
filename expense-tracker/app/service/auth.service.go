@@ -4,6 +4,8 @@ import (
 	"ExpenseTracker/app/model"
 	utilities "ExpenseTracker/app/utils"
 	"errors"
+
+	"github.com/google/uuid"
 )
 
 type AuthService struct {
@@ -42,4 +44,32 @@ func (s *AuthService) Login(user model.AuthPayload) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (s *AuthService) InitializeTwoFactorAuth(userId uuid.UUID) (utilities.Result, error) {
+	result, err := utilities.SetupTwoFactorAuth(userId)
+	if err != nil {
+		return result, err
+	}
+
+	_, err = s.UserService.UpdateUser(userId, model.UserPayload{
+		TfaSecret: result.SECRET,
+	})
+
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (s *AuthService) VerifyTwoFactorAuth(userId uuid.UUID, code string) (bool, error) {
+	user, err := s.UserService.GetUserByID(userId)
+	if err != nil {
+		return false, err
+	}
+
+	isVaild := utilities.VerifyTwoFactorAuth(string(user.TfaSecret), code)
+
+	return isVaild, nil
 }

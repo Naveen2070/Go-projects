@@ -50,7 +50,10 @@ func createUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "invalid request body"})
 	}
-	result, _ := userService.CreateUser(user)
+	result, err := userService.CreateUser(user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to create user", "error": err.Error()})
+	}
 	if !result {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "failed to create user"})
 	}

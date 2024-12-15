@@ -56,11 +56,15 @@ func (s *UserService) UpdateUser(id uuid.UUID, updatedUser model.UserPayload) (m
 	if result.Error != nil {
 		return model.User{}, result.Error
 	}
+
 	userToUpdate := model.User{
 		Username:  updatedUser.Username,
 		Email:     updatedUser.Email,
+		Password:  updatedUser.Password,
+		TfaSecret: updatedUser.TfaSecret,
 		UpdatedAt: time.Now(),
 	}
+
 	result = db.Model(&user).Updates(&userToUpdate)
 	if result.Error != nil {
 		return model.User{}, result.Error
