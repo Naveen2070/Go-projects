@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net"
+	"time"
 )
 
 func ForwardRequest(address string, request map[string]interface{}) ([]byte, error) {
@@ -13,8 +14,14 @@ func ForwardRequest(address string, request map[string]interface{}) ([]byte, err
 	}
 	defer conn.Close()
 
+	// Set a deadline for the connection
+	conn.SetDeadline(time.Now().Add(5 * time.Second))
+
 	requestData, _ := json.Marshal(request)
-	conn.Write(requestData)
+	_, err = conn.Write(requestData)
+	if err != nil {
+		return nil, err
+	}
 
 	response, err := io.ReadAll(conn)
 	if err != nil {

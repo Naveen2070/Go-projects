@@ -3,20 +3,20 @@ package main
 import (
 	"fmt"
 	"net"
-	app "users/src"
+	app "users/src" // Make sure to replace this with the actual import path of your app package
 )
 
 func main() {
-	address := "localhost:9002"
+	address := "localhost:9001"
 
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
-		fmt.Println("Error starting Posts Service:", err)
+		fmt.Println("Error starting User Service:", err)
 		return
 	}
 	defer listener.Close()
 
-	fmt.Println("Posts Service is listening on", address)
+	fmt.Println("User Service is listening on", address)
 
 	for {
 		conn, err := listener.Accept()
