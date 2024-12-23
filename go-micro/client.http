@@ -1,0 +1,5 @@
+### basic test
+POST http://localhost:8081/send
+Content-Type: text/plain
+
+hello
