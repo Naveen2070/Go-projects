@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package expense;
+
+option go_package = "/common";
+
+service ExpenseService {
+  rpc CreateExpense(CreateExpenseRequest) returns (CreateExpenseResponse);
+  rpc GetExpenses(GetExpensesRequest) returns (GetExpensesResponse);
+}
+
+message CreateExpenseRequest {
+  string title = 1;
+  float amount = 2;
+  string category = 3;
+}
+
+message CreateExpenseResponse {
+  string id = 1;
+  string message = 2;
+}
+
+message GetExpensesRequest {}
+
+message GetExpensesResponse {
+  repeated Expense expenses = 1;
+}
+
+message Expense {
+  string id = 1;
+  string title = 2;
+  float amount = 3;
+  string category = 4;
+}
