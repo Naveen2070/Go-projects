@@ -5,7 +5,7 @@ go 1.23.4
 require google.golang.org/grpc v1.69.2
 
 require (
-	github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225102957-72cdec720ce3 // indirect
+	github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225154835-3e1755ff08d3 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect

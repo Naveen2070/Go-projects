@@ -1,5 +1,7 @@
 github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225102957-72cdec720ce3 h1:ZI3mZxeqHB0Dd32qQhJkDlZkFYLdXNMKDn/VMkp2O/0=
 github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225102957-72cdec720ce3/go.mod h1:rbDKn4f0vkvFHWSAs23a9Ytz2M3FS2KjyJY0IJpUMGs=
+github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225154835-3e1755ff08d3 h1:Wmt2TtJfk2/dEm2kut75SVwHEuQeGN0LSeihUOcbEPk=
+github.com/Naveen2070/Go-projects/go-grpc/common v0.0.0-20241225154835-3e1755ff08d3/go.mod h1:rbDKn4f0vkvFHWSAs23a9Ytz2M3FS2KjyJY0IJpUMGs=
 golang.org/x/net v0.30.0 h1:AcW1SDZMkb8IpzCdQUaIq2sP4sZ4zw+55h6ynffypl4=
 golang.org/x/net v0.30.0/go.mod h1:2wGyMJ5iFasEhkwi13ChkO/t1ECNC4X4eBKkVFyYFlU=
 golang.org/x/net v0.33.0 h1:74SYHlV8BIgHIFC/LrYkOGIwL19eTYXQ5wc6TBuO36I=
