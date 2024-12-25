@@ -12,6 +12,16 @@ type ExpenseServiceServer struct {
 	expenses []*expensepb.Expense
 }
 
+// HealthServiceServer is the implementation of the HealthService
+type HealthServiceServer struct {
+	expensepb.UnimplementedHealthServiceServer
+}
+
+// Check implements the HealthService Check method
+func (h *HealthServiceServer) Check(ctx context.Context, req *expensepb.HealthCheckRequest) (*expensepb.HealthCheckResponse, error) {
+	return &expensepb.HealthCheckResponse{Status: "SERVING"}, nil
+}
+
 func (s *ExpenseServiceServer) CreateExpense(ctx context.Context, req *expensepb.CreateExpenseRequest) (*expensepb.CreateExpenseResponse, error) {
 	expense := expensepb.Expense{
 		Id:       fmt.Sprintf("%d", len(s.expenses)+1),
