@@ -1,4 +1,4 @@
-package expenses
+package service
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 
 type ExpenseServiceServer struct {
 	expensepb.UnimplementedExpenseServiceServer
-	expenses []expensepb.Expense
+	expenses []*expensepb.Expense
 }
 
 func (s *ExpenseServiceServer) CreateExpense(ctx context.Context, req *expensepb.CreateExpenseRequest) (*expensepb.CreateExpenseResponse, error) {
@@ -19,7 +19,7 @@ func (s *ExpenseServiceServer) CreateExpense(ctx context.Context, req *expensepb
 		Amount:   req.Amount,
 		Category: req.Category,
 	}
-	s.expenses = append(s.expenses, expense)
+	s.expenses = append(s.expenses, &expense)
 	return &expensepb.CreateExpenseResponse{
 		Id:      expense.Id,
 		Message: "Expense added successfully",
