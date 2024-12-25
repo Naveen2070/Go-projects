@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"tcpconnect/src"
-	"tcpconnect/src/handler"
+
+	"github.com/Naveen2070/Go-projects/go-micro/tcpconnect/src"
+	"github.com/Naveen2070/Go-projects/go-micro/tcpconnect/src/handler"
 )
 
 func main() {

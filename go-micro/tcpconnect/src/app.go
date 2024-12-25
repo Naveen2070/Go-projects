@@ -64,3 +64,28 @@ func startReadAndSend(conn net.Conn, handler Handler) {
 		}
 	}
 }
+
+// sendToTCPServer connects to the TCP server, sends a message, and returns the response.
+func SendToTCPServer(Port int, message string) (string, error) {
+	// Connect to the TCP server
+	conn, err := net.Dial("tcp", "localhost:"+fmt.Sprint(Port))
+	if err != nil {
+		return "", fmt.Errorf("failed to connect to TCP server: %w", err)
+	}
+	defer conn.Close()
+
+	// Send the message to the TCP server
+	_, err = conn.Write([]byte(message + "\n"))
+	if err != nil {
+		return "", fmt.Errorf("failed to send message to TCP server: %w", err)
+	}
+
+	// Read the response from the TCP server
+	responseBuffer := make([]byte, 1024)
+	n, err := conn.Read(responseBuffer)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response from TCP server: %w", err)
+	}
+
+	return string(responseBuffer[:n]), nil
+}
