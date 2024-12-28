@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "github.com/Naveen2070/Go-projects/common-service/users";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (GetUserResponse);
+  rpc GetUserById(GetUserRequest) returns (GetUserResponse);
+}
+
+message CreateUserRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string username = 3;
+  string password = 4;
+  string email = 5;
+}
+
+message GetUserRequest {
+  string user_id = 1; 
+}
+
+message GetUserResponse {
+  string user_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string username = 4;
+  string email = 5;
+  string last_updated = 6;
+  string created_at = 7;
+}
+
+
+service HealthService {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1; 
+}
