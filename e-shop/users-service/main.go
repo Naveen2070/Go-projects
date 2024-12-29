@@ -6,7 +6,12 @@ import (
 	"sync"
 
 	userspb "github.com/Naveen2070/Go-projects/e-shop/common-service/users"
+	"github.com/Naveen2070/Go-projects/e-shop/users-service/service"
 	"google.golang.org/grpc"
+)
+
+var (
+	PORT = ":8081"
 )
 
 // LoggingListener wraps net.Listener to log connections and disconnections.
@@ -47,7 +52,7 @@ func (wc *wrappedConn) Close() error {
 }
 
 func main() {
-	baseListener, err := net.Listen("tcp", ":8081")
+	baseListener, err := net.Listen("tcp", PORT)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -55,13 +60,13 @@ func main() {
 	listener := &LoggingListener{Listener: baseListener}
 
 	grpcServer := grpc.NewServer()
-	expenseService := &service.ExpenseServiceServer{}
+	userService := &service.UserServiceServer{}
 	healthService := &service.HealthServiceServer{}
 
-	userspb.RegisterExpenseServiceServer(grpcServer, expenseService)
+	userspb.RegisterUserServiceServer(grpcServer, userService)
 	userspb.RegisterHealthServiceServer(grpcServer, healthService)
 
-	log.Println("gRPC server is running on port :50051...")
+	log.Println("gRPC server is running on port " + PORT + "...")
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
