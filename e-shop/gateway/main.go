@@ -36,8 +36,16 @@ func main() {
 
 	// Initialize HTTP server
 	mux := http.NewServeMux()
+
+	// Register routes
 	handler := handler.NewHandler(userClient)
 	handler.RegisterRoutes(mux)
+
+	//health check the http server
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 
 	log.Printf("Gateway server started on %s", ":8080")
 	if err := http.ListenAndServe(":8080", mux); err != nil {
