@@ -9,6 +9,7 @@ import (
 	"time"
 
 	userspb "github.com/Naveen2070/Go-projects/e-shop/common-service/users"
+	"github.com/gorilla/mux"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -35,13 +36,13 @@ func main() {
 	defer conn.Close()
 
 	// Initialize HTTP server
-	mux := http.NewServeMux()
+	mux := mux.NewRouter()
 
 	// Register routes
 	handler := handler.NewHandler(userClient)
 	handler.RegisterRoutes(mux)
 
-	//health check the http server
+	//helath check
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	userspb "github.com/Naveen2070/Go-projects/e-shop/common-service/users"
@@ -27,7 +28,7 @@ func genUUID() string {
 	return string(uuid)
 }
 
-func (s *UserServiceServer) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.Users, error) {
+func (s *UserServiceServer) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.User, error) {
 	user := &userspb.Users{
 		UserId:      genUUID(),
 		FirstName:   req.FirstName,
@@ -40,3 +41,16 @@ func (s *UserServiceServer) CreateUser(ctx context.Context, req *userspb.CreateU
 	s.users = append(s.users, user)
 	return user, nil
 }
+
+func (s *UserServiceServer) GetUserById(ctx context.Context, req *userspb.GetUserByIdRequest) (*userspb.User, error) {
+	for _, user := range s.users {
+		if user.UserId == req.UserId {
+			return user, nil
+		}
+	}
+	return nil, errors.New("user not found")
+}
+
+// func (s *UserServiceServer) GetUsers(ctx context.Context, req *userspb.GetUsersRequest) (*userspb.GetUsersResponse, error) {
+// 	return &userspb.GetUsersResponse{Users: s.users}, nil
+// }

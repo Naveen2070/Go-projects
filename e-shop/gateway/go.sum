@@ -1,5 +1,7 @@
 github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20241229125959-a6f6ace4e195 h1:atL9FuCA0fT15c8+1GxdomMYWg6F67GGym8KgzuMbmE=
 github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20241229125959-a6f6ace4e195/go.mod h1:SFMpHJjIPbSAdqQVE9EDq8Gk2QyfWA1fW3Y15lGjvC4=
+github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
+github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
 golang.org/x/net v0.33.0 h1:74SYHlV8BIgHIFC/LrYkOGIwL19eTYXQ5wc6TBuO36I=
 golang.org/x/net v0.33.0/go.mod h1:HXLR5J+9DxmrqMwG9qjGCxZ+zKXxBru04zlTvWlWuN4=
 golang.org/x/sys v0.28.0 h1:Fksou7UEQUWlKvIdsqzJmUmCX3cZuD2+P3XyyzwMhlA=

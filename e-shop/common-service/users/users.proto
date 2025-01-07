@@ -5,11 +5,20 @@ package users;
 option go_package = "github.com/Naveen2070/Go-projects/common-service/users";
 
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (Users);
-  rpc GetUserById(GetUserByIdRequest) returns (Users);
+  rpc CreateUser(CreateUserRequest) returns (User);
+  rpc GetUserById(GetUserByIdRequest) returns (User);
+  rpc GetUsers(GetUsersRequest) returns (Users);
 }
 
-message Users{
+message GetUsersRequest {
+
+}
+
+message Users {
+  repeated User users = 1;
+}
+
+message User{
   string user_id = 1;
   string first_name = 2;
   string last_name = 3;
@@ -30,11 +39,6 @@ message CreateUserRequest {
 message GetUserByIdRequest {
   string user_id = 1; 
 }
-
-message GetUsersResponse {
-  repeated Users users = 1;
-}
-
 
 service HealthService {
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
