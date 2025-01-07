@@ -3,7 +3,7 @@ module github.com/Naveen2070/Go-projects/e-shop/users-service
 go 1.23.4
 
 require (
-	github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250104064730-bdb8c737a91c
+	github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250107070039-8aa14448720e
 	google.golang.org/grpc v1.69.2
 )
 

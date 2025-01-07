@@ -4,6 +4,8 @@ github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20241229123822-59
 github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20241229123822-596b45f4ca07/go.mod h1:SFMpHJjIPbSAdqQVE9EDq8Gk2QyfWA1fW3Y15lGjvC4=
 github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250104064730-bdb8c737a91c h1:rJev9wVYbrE8WvnB4LPUeIt7MzFzLChdOwL6pQFElTk=
 github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250104064730-bdb8c737a91c/go.mod h1:SFMpHJjIPbSAdqQVE9EDq8Gk2QyfWA1fW3Y15lGjvC4=
+github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250107070039-8aa14448720e h1:H+LZ+th1M5S943/to0w6flcdCaEth6mUqYzPTWYdzK8=
+github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250107070039-8aa14448720e/go.mod h1:SFMpHJjIPbSAdqQVE9EDq8Gk2QyfWA1fW3Y15lGjvC4=
 golang.org/x/net v0.33.0 h1:74SYHlV8BIgHIFC/LrYkOGIwL19eTYXQ5wc6TBuO36I=
 golang.org/x/net v0.33.0/go.mod h1:HXLR5J+9DxmrqMwG9qjGCxZ+zKXxBru04zlTvWlWuN4=
 golang.org/x/sys v0.28.0 h1:Fksou7UEQUWlKvIdsqzJmUmCX3cZuD2+P3XyyzwMhlA=

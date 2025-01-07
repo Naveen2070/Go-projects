@@ -10,7 +10,7 @@ import (
 
 type UserServiceServer struct {
 	userspb.UnimplementedUserServiceServer
-	users []*userspb.Users
+	users []*userspb.User
 }
 
 // HealthServiceServer is the implementation of the HealthService
@@ -29,7 +29,7 @@ func genUUID() string {
 }
 
 func (s *UserServiceServer) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.User, error) {
-	user := &userspb.Users{
+	user := &userspb.User{
 		UserId:      genUUID(),
 		FirstName:   req.FirstName,
 		LastName:    req.LastName,
@@ -51,6 +51,9 @@ func (s *UserServiceServer) GetUserById(ctx context.Context, req *userspb.GetUse
 	return nil, errors.New("user not found")
 }
 
-// func (s *UserServiceServer) GetUsers(ctx context.Context, req *userspb.GetUsersRequest) (*userspb.GetUsersResponse, error) {
-// 	return &userspb.GetUsersResponse{Users: s.users}, nil
-// }
+func (s *UserServiceServer) GetUsers(ctx context.Context, req *userspb.GetUsersRequest) (*userspb.Users, error) {
+	if len(s.users) == 0 {
+		return &userspb.Users{}, errors.New("no users found")
+	}
+	return &userspb.Users{Users: s.users}, nil
+}

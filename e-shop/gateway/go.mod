@@ -3,7 +3,7 @@ module gateway
 go 1.23.4
 
 require (
-	github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20241229125959-a6f6ace4e195
+	github.com/Naveen2070/Go-projects/e-shop/common-service v0.0.0-20250107070039-8aa14448720e
 	github.com/gorilla/mux v1.8.1
 	google.golang.org/grpc v1.69.2
 )
