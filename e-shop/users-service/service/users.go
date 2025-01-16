@@ -25,6 +25,7 @@ func (h *HealthServiceServer) Check(ctx context.Context, req *userspb.HealthChec
 
 func genUUID() string {
 	uuid := make([]byte, 16)
+	println(uuid)
 	return string(uuid)
 }
 
