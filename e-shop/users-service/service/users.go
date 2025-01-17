@@ -23,6 +23,7 @@ func (h *HealthServiceServer) Check(ctx context.Context, req *userspb.HealthChec
 	return &userspb.HealthCheckResponse{Status: "SERVING"}, nil
 }
 
+//change to uuid from db library
 func genUUID() string {
 	uuid := make([]byte, 16)
 	println(uuid)
